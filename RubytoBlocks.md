@@ -56,9 +56,9 @@ import SampleConverter from "./sample.js";
 
 ### `puts "command0"`を逆変換する場合
 
-基本的な形(引数入力なし)
-
 ---
+
+基本的な形(引数入力なし)
 
 ```js
 const SampleConverter = {
@@ -125,9 +125,9 @@ return block;
 
 このブロックでは引数が固定なのでこれで終わりです。
 
----
-
 ### `puts(command1, ${text}, ${num})`を逆変換する場合
+
+---
 
 基本的な形(引数入力あり)
 
@@ -191,9 +191,9 @@ converter.addTextInput(block, "TEXT", args[1].value, "hello");
 converter.addNumberInput(block, "NUM", "math_number", args[2].value, 2);
 ```
 
----
-
 ### `puts(command3, ${text1}, ${num1})`を逆変換する場合
+
+---
 
 基本的な形(メニューあり)
 
@@ -258,5 +258,3 @@ converter.addFieldInput(
   "-1"
 );
 ```
-
----
