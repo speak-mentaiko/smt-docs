@@ -40,6 +40,84 @@ converter.registerCallMethodWithBlock(
 3 つ目までの引数は`converter.registerCallMethod`と同じです<br>
 4 つ目の引数は end 側につく引数の数？(未確認)
 
+# インスタンスメソッド
+
+```js
+tools.puts("test");
+```
+
+というインスタンスメソッドがあった場合、逆変換は以下のようになります。
+
+```js
+register: function (converter) {
+  converter.registerCallMethod("self", "tools", 0, (params) => {
+    const { node } = params;
+    return converter.createRubyExpressionBlock(Tools, node);
+  });
+
+  converter.registerCallMethod("tools", "puts", 0, (params) => {
+    const { receiver, node } = params;
+
+    if (!converter.isStringOrBlock(args[0])) return null;
+
+    const block = converter.changeRubyExpressionBlock(
+      receiver,
+      "tools_puts",
+      "statement"
+    );
+    converter.addTextInput(block, "TEXT", args[0], "test");
+    return block;
+  });
+},
+```
+
+## インスタンスを作成
+
+今回の場合は`tools`がインスタンス名なので、<br>
+`registerCallMethod`と`createRubyExpressionBlock`にそれぞれ当てはめる。
+この時インスタンス名は
+
+- 大文字は使えない
+- `.`、`=`などの一部文字は使えない
+
+などの制限がある。
+
+```js
+converter.registerCallMethod("self", "tools", 0, (params) => {
+  const { node } = params;
+  return converter.createRubyExpressionBlock("tools", node);
+});
+```
+
+## インスタンスメソッド
+
+通常のメソッドとの違いは
+
+- `registerCallMethod`の`self`だった部分がインスタンス名になっている。
+- `createBlock`が`changeRubyExpressionBlock`になっている。
+
+という部分<br>
+それ以外は基本的に同じになっている。
+
+メソッド名の部分に`=`が使えるようになっている。
+この場合`=`以降を引数として扱う
+
+```js
+converter.registerCallMethod("tools", "puts", 0, (params) => {
+  const { receiver, node } = params;
+
+  if (!converter.isStringOrBlock(args[0])) return null;
+
+  const block = converter.changeRubyExpressionBlock(
+    receiver,
+    "tools_puts",
+    "statement"
+  );
+  converter.addTextInput(block, "TEXT", args[0], "test");
+  return block;
+});
+```
+
 # その他
 
 こまごまとした仕様？を書きます
