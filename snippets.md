@@ -18,7 +18,7 @@ ruby タブでコードを補完してくれる機能
   },
   "command1": {
     "snippet": "puts (command1, \"hello\", 0)",
-    "description": "command1 (hello) (0) と表示"
+    "description": "command1 (hello) (0) を表示"
   }
 }
 ```
@@ -28,8 +28,8 @@ ruby タブでコードを補完してくれる機能
 ```json
 {
   "メッソド名": {
-    "snippet": 簡単なメソッドの例,　//たぶん
-    "description": メソッドのブロックとの対応
+    "snippet": "簡単なメソッドの例", //たぶん
+    "description": "メソッドのブロックとの対応"
   }
 }
 ```
