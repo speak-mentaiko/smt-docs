@@ -137,12 +137,12 @@ const SampleConverter = {
     converter.registerCallMethod("self", "puts", 3, (params) => {
       const { args } = params;
       if (!args[0].value === "command1") return null;
-      if (!converter.isStringOrBlock(args[1].value)) return null;
-      if (!converter.isNumberOrBlock(args[2].value)) return null;
+      if (!converter.isStringOrBlock(args[1])) return null;
+      if (!converter.isNumberOrBlock(args[2])) return null;
 
       const block = converter.createBlock("sample_command1", "statement");
-      converter.addTextInput(block, "TEXT", args[1].value, "hello");
-      converter.addNumberInput(block, "NUM", "math_number", args[2].value, 2);
+      converter.addTextInput(block, "TEXT", args[1], "hello");
+      converter.addNumberInput(block, "NUM", "math_number", args[2], 2);
       return block;
     });
   },
@@ -158,8 +158,8 @@ export default SampleConverter;
 
 ```js
 if (!args[0].value === "command1") return null;
-if (!converter.isStringOrBlock(args[1].value)) return null;
-if (!converter.isNumberOrBlock(args[2].value)) return null;
+if (!converter.isStringOrBlock(args[1])) return null;
+if (!converter.isNumberOrBlock(args[2])) return null;
 ```
 
 実際に変換するブロックを指定します。<br>
@@ -169,13 +169,13 @@ if (!converter.isNumberOrBlock(args[2].value)) return null;
 - `converter.addTextInput`
   - テキストを入れる関数
   - 2 つ目の引数は vm 側で定義した変数の名前
-  - 3 つ目は入れる値
+  - 3 つ目は渡す値
   - 4 つ目は不明、デフォルト値？
 - `converter.addNumberInput`
   - 数字を入れる関数
   - 2 つ目の引数は vm 側で定義した変数の名前
   - 3 つ目は不明、`math_number`以外見たことない
-  - 4 つ目は実際に入れる値
+  - 4 つ目は実際に渡す値
   - 5 つ目は不明、デフォルト値？
 - `converter.addField`
   - ブロックの入らないメニュー<br>
@@ -187,8 +187,8 @@ if (!converter.isNumberOrBlock(args[2].value)) return null;
   - 特殊
 
 ```js
-converter.addTextInput(block, "TEXT", args[1].value, "hello");
-converter.addNumberInput(block, "NUM", "math_number", args[2].value, 2);
+converter.addTextInput(block, "TEXT", args[1], "hello");
+converter.addNumberInput(block, "NUM", "math_number", args[2], 2);
 ```
 
 ### `puts(command3, ${text1}, ${num1})`を逆変換する場合
@@ -203,8 +203,8 @@ const SampleConverter = {
     converter.registerCallMethod("self", "puts", 3, (params) => {
       const { args } = params;
       if (!args[0].value === "command3") return null;
-      if (!converter.isStringOrBlock(args[1].value)) return null;
-      if (!converter.isStringOrBlock(args[2].value)) return null;
+      if (!converter.isStringOrBlock(args[1])) return null;
+      if (!converter.isStringOrBlock(args[2])) return null;
 
       const block = converter.createBlock("sample_command3", "statement");
       converter.addFieldInput(
@@ -236,7 +236,7 @@ export default SampleConverter;
 2 つ目の引数は vm 側で定義した変数の名前、<br>
 3 つ目の引数は `ruby-generator`で定義したメニューの名前、<br>
 4 つ目の引数は vm 側の`menus`で定義したメニューの名前、<br>
-5 つ目の引数は実際に入れる値、<br>
+5 つ目の引数は実際に渡す値、<br>
 6 つ目の引数は不明、デフォルト値?<br>
 という風になります。
 
