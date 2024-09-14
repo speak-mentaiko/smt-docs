@@ -10,11 +10,11 @@ tools.puts("test");
 register: function (converter) {
   converter.registerCallMethod("self", "tools", 0, (params) => {
     const { node } = params;
-    return converter.createRubyExpressionBlock(Tools, node);
+    return converter.createRubyExpressionBlock("tools", node);
   });
 
-  converter.registerCallMethod("tools", "puts", 0, (params) => {
-    const { receiver, node } = params;
+  converter.registerCallMethod("tools", "puts", 1, (params) => {
+    const { receiver, args } = params;
 
     if (!converter.isStringOrBlock(args[0])) return null;
 
@@ -89,9 +89,10 @@ converter.registerCallMethod("tools", "puts", 0, (params) => {
 
 ## 補完機能とは
 
-![snippet](/images/snippet.png)
+![snippet](/images/snippets.png)
 
-ruby タブでコードを補完してくれる機能
+ruby タブでコードを補完してくれる機能<br>
+メソッドの簡単な説明がついている
 
 ## 実装方法
 
@@ -115,11 +116,27 @@ ruby タブでコードを補完してくれる機能
 ```json
 {
   "メソッド名": {
-    "snippet": "簡単なメソッドの例", //たぶん
-    "description": "メソッドのブロックとの対応"
+    "snippet": "簡単なメソッドの例",
+    "description": "ブロックの文言"
   }
 }
 ```
+
+### 例
+
+![snippets](/images/snippets.png)
+
+```json
+"snippet": "microbit.display_text(\"こんにちは!\")",
+```
+
+![code](/images/snippets-code.png)
+
+```json
+"description": "(こんにちは!)を表示する"
+```
+
+![block](/images/snippets-block.png)
 
 # その他
 

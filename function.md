@@ -10,7 +10,7 @@
 ```js
 converter.registerCallMethod(
   インスタンス名,
-  メッソド名,
+  メソッド名,
   引数の数,
   (params) => {}
 );
@@ -20,8 +20,8 @@ converter.registerCallMethod(
 
 1 つ目の引数は基本的に`self`になり、
 `command.puts`のようなインスタンスメソッドを呼び出す場合はインスタンス名になります。その場合は`command`となります。<br>
-2 つ目の引数は変換するメッソド名です。<br>
-3 つ目の引数は変換するメッソドの引数の数です。
+2 つ目の引数は変換するメソッド名です。<br>
+3 つ目の引数は変換するメソッドの引数の数です。
 
 ### registerCallMethodWithBlock
 
@@ -30,7 +30,7 @@ converter.registerCallMethod(
 ```js
 converter.registerCallMethodWithBlock(
   インスタンス名,
-  メッソド名,
+  メソッド名,
   上の引数の数,
   下の引数の数, //たぶん
   (params) => {}
@@ -99,7 +99,9 @@ const block = converter.createBlock(メソッド名, ブロックの形);
 
 変換するブロックを指定します。
 
-ここでのメソッド名は`ruby-generator`側で定義したメソッド名<br>
+1 つ目の引数は`ruby-generator`側で定義したメソッド名<br>
+2 つ目の引数はブロックの形
+
 ブロックの形は以下のようなものがあります<br>
 `value`<br>
 ![value](/images/valueblock.png)<br>
@@ -116,6 +118,16 @@ converter.createRubyExpressionBlock(インスタンス名, node);
 
 インスタンス部分を作成するときに用います。
 
+1 つ目の引数はインスタンス名<br>
+2 つ目の引数は`node`
+
+インスタンス名は以下のような制限があります<br>
+
+- 大文字は使えない
+- `=`、`.`、`[]`、`()`などの記号は使えない
+
+`node`は`params`から分割代入します
+
 ### changeRubyExpressionBlock
 
 ```js
@@ -124,6 +136,11 @@ converter.changeRubyExpressionBlock(receiver, メソッド名, ブロックの�
 
 インスタンスメソッドを作成するときに用います。
 
+1 つ目の引数は`receiver`<br>
+2 つ目の引数はメソッド名<br>
+3 つ目の引数はブロックの形<br>
+
+`receiver`は`params`から分割代入します<br>
 メソッド名とブロックの形は`createBlock`を参照
 
 ### addTextInput
@@ -136,8 +153,8 @@ converter.addTextInput(block, 引数名, 渡す値, デフォルト値？);
 
 1 つ目の引数は 引数を渡すブロック。基本的に`block`のままで問題ない<br>
 2 つ目の引数は vm 側の`arguments`で決めた引数名<br>
-3 つ目の引数は 実際に渡す値、基本的には`args[n]`という形になる<br>
-4 つ目の引数は 不明、デフォルト値?<br>
+3 つ目の引数は 実際に渡す値。基本的には`args[n]`という形になる<br>
+4 つ目の引数は 不明。デフォルト値?<br>
 
 ### addNumberInput
 
@@ -150,8 +167,8 @@ converter.addNumberInput(block, 引数名, 'math_number', 渡す値, デフォ�
 1 つ目の引数は 引数を渡すブロック。基本的に`block`のままで問題ない<br>
 2 つ目の引数は vm 側の`arguments`で決めた引数名<br>
 3 つ目の引数は 不明。`math_number`しか見たことがない<br>
-4 つ目の引数は 実際に渡す値、基本的には`args[n]`という形になる<br>
-5 つ目の引数は 不明、デフォルト値?<br>
+4 つ目の引数は 実際に渡す値。基本的には`args[n]`という形になる<br>
+5 つ目の引数は 不明。デフォルト値?<br>
 
 ### addFieldInput
 
@@ -167,8 +184,8 @@ converter.addFieldInput(block, 引数名, gui側メニュー名, vm側メニュ�
 2 つ目の引数は vm 側の`arguments`で決めた引数名<br>
 3 つ目の引数は gui 側で定義したメニューの名前<br>
 4 つ目の引数は vm 側の`menus`で定義したメニュー名<br>
-4 つ目の引数は 実際に渡す値、基本的には`args[n]`という形になる<br>
-5 つ目の引数は 不明、デフォルト値?<br>
+4 つ目の引数は 実際に渡す値。基本的には`args[n]`という形になる<br>
+5 つ目の引数は 不明。デフォルト値?<br>
 
 ### addField
 
@@ -182,8 +199,8 @@ converter.addField(block, 引数名, 渡す値, デフォルト値？);
 
 1 つ目の引数は 引数を渡すブロック。基本的に`block`のままで問題ない<br>
 2 つ目の引数は vm 側の`arguments`で決めた引数名<br>
-3 つ目の引数は 実際に渡す値、基本的には`args[n]`という形になる<br>
-4 つ目の引数は 不明、デフォルト値? なくても問題ない<br>
+3 つ目の引数は 実際に渡す値。基本的には`args[n]`という形になる<br>
+4 つ目の引数は 不明。デフォルト値? なくても問題ない<br>
 
 ### addInput
 
