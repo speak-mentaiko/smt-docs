@@ -3,7 +3,9 @@
 逆変換に用いられる関数の使い方を簡単に上げておきます。
 間違っていたり、無いものがありますが許してください。
 
-## converter.registerCallMethod
+## converter クラス
+
+### registerCallMethod
 
 ```js
 converter.registerCallMethod(
@@ -14,14 +16,14 @@ converter.registerCallMethod(
 );
 ```
 
-基本的なブロック(`value`, `statement`, `hat`)が変換できる
+基本的なブロック(`value`, `statement`, `hat`)が変換できます。
 
-まず 1 つ目の引数は基本的に`self`になり、
+1 つ目の引数は基本的に`self`になり、
 `command.puts`のようなインスタンスメソッドを呼び出す場合はインスタンス名になります。その場合は`command`となります。<br>
 2 つ目の引数は変換するメッソド名です。<br>
 3 つ目の引数は変換するメッソドの引数の数です。
 
-## converter.registerCallMethodWithBlock
+### registerCallMethodWithBlock
 
 > 確認しきれていません
 
@@ -40,181 +42,153 @@ converter.registerCallMethodWithBlock(
 3 つ目までの引数は`converter.registerCallMethod`と同じです<br>
 4 つ目の引数は end 側につく引数の数？(未確認)
 
-# インスタンスメソッド
+### isString
 
 ```js
-tools.puts("test");
+converter.isString(確認する値);
 ```
 
-というインスタンスメソッドがあった場合、逆変換は以下のようになります。
+引数が文字列か確認します。
+
+引数には基本的に`args[n]`を入れます
+
+### isNumber
 
 ```js
-register: function (converter) {
-  converter.registerCallMethod("self", "tools", 0, (params) => {
-    const { node } = params;
-    return converter.createRubyExpressionBlock(Tools, node);
-  });
-
-  converter.registerCallMethod("tools", "puts", 0, (params) => {
-    const { receiver, node } = params;
-
-    if (!converter.isStringOrBlock(args[0])) return null;
-
-    const block = converter.changeRubyExpressionBlock(
-      receiver,
-      "tools_puts",
-      "statement"
-    );
-    converter.addTextInput(block, "TEXT", args[0], "test");
-    return block;
-  });
-},
+converter.isNumber(確認する値);
 ```
 
-## インスタンスを作成
+引数が数字か確認します。
 
-今回の場合は`tools`がインスタンス名なので、<br>
-`registerCallMethod`と`createRubyExpressionBlock`にそれぞれ当てはめる。
-この時インスタンス名は
+引数には基本的に`args[n]`を入れます
 
-- 大文字は使えない
-- `.`、`=`などの一部文字は使えない
-
-などの制限がある。
+### isBlock
 
 ```js
-converter.registerCallMethod("self", "tools", 0, (params) => {
-  const { node } = params;
-  return converter.createRubyExpressionBlock("tools", node);
-});
+converter.isBlock(確認する値);
 ```
 
-## インスタンスメソッド
+不明<br>
+名前からしてブロックか確認？
 
-通常のメソッドとの違いは
-
-- `registerCallMethod`の`self`だった部分がインスタンス名になっている。
-- `createBlock`が`changeRubyExpressionBlock`になっている。
-
-という部分<br>
-それ以外は基本的に同じになっている。
-
-メソッド名の部分に`=`が使えるようになっている。
-この場合`=`以降を引数として扱う
+### isStringOrBlock
 
 ```js
-converter.registerCallMethod("tools", "puts", 0, (params) => {
-  const { receiver, node } = params;
-
-  if (!converter.isStringOrBlock(args[0])) return null;
-
-  const block = converter.changeRubyExpressionBlock(
-    receiver,
-    "tools_puts",
-    "statement"
-  );
-  converter.addTextInput(block, "TEXT", args[0], "test");
-  return block;
-});
+converter.isStringOrBlock(確認する値);
 ```
 
-# その他
+引数が文字列もしくはブロックか確認します。
 
-こまごまとした仕様？を書きます
+引数には基本的に`args[n]`を入れます
 
-## `args`の取り方
-
-基本的な取り方としては`args[0]`のように取ります。
+### isNumberOrBlock
 
 ```js
-swap(num1, num2);
+converter.isNumberOrBlock(確認する値);
 ```
 
-というメソッドがあった場合、<br>
-1 つ目の引数を取る場合は`args[0]`となります。<br>
-2 つ目の引数を取る場合は`args[1]`となります。<br>
+引数が数字もしくはブロックか確認します。
+
+引数には基本的に`args[n]`を入れます
+
+### createBlock
 
 ```js
-swap(first: num1, second: num2, third: num3)
+const block = converter.createBlock(メソッド名, ブロックの形);
 ```
 
-というメソッドがあった場合、<br>
-1 つ目の引数を取る場合は`args[0].get('sym:first')`となります。<br>
-2 つ目の引数を取る場合は`args[0].get('sym:second')`となります。<br>
-3 つ目の引数を取る場合は`args[0].get('sym:third')`となります。<br>
+変換するブロックを指定します。
 
-ハッシュは 1 つとしてカウントされます
+ここでのメソッド名は`ruby-generator`側で定義したメソッド名<br>
+ブロックの形は以下のようなものがあります<br>
+`value`<br>
+![value](/images/valueblock.png)<br>
+`statement`<br>
+![statement](/images/statementblock.png)<br>
+`hat`<br>
+![alt text](/images/hatblock.png)
 
-また引数の値を読み取る場合は`args[0].value`という風に取ります。<br>
-引数に入っているのが値かブロックか分からないため、基本的に型の確認や引数を渡す際は`args[0]`といった形で渡しましょう。<br>
-ただブロックを受け入れない場合などは`args[0].value`といった形で問題ありません。<br>
-
-## 型の確認
-
-引数の値が正しい型かを確認する関数たちです。
+### createRubyExpressionBlock
 
 ```js
-converter.isNumberOrBlock(args[0]);
+converter.createRubyExpressionBlock(インスタンス名, node);
 ```
 
-- `isString`
-  - 文字列かどうかを確認
-- `isNumber`
-  - 数字かどうかを確認
-- `isBlock`
-  - 不明
-- `isStringOrBlock`
-  - 文字列もしくはブロックか確認
-- `isNumberOrBlock`
-  - 数字もしくはブロックか確認
+インスタンス部分を作成するときに用います。
 
-## 引数を渡す
+### changeRubyExpressionBlock
 
-変換するメソッドに引数を渡します。
+```js
+converter.changeRubyExpressionBlock(receiver, メソッド名, ブロックの形);
+```
 
-- `converter.addTextInput`
-  - テキストを入れる関数
-  - 2 つ目の引数は vm 側で定義した変数の名前
-  - 3 つ目は渡す値
-  - 4 つ目は不明、デフォルト値？
-  ```js
-  converter.addTextInput(block, "TEXT", args[1], "hello");
-  ```
-- `converter.addNumberInput`
-  - 数字を入れる関数
-  - 2 つ目の引数は vm 側で定義した変数の名前
-  - 3 つ目は不明、`math_number`以外見たことない
-  - 4 つ目は実際に渡す値
-  - 5 つ目は不明、デフォルト値？
-  ```js
-  converter.addNumberInput(block, "NUM", "math_number", args[2], 2);
-  ```
-- `converter.addField`
-  - ブロックの入らないメニュー<br>
-    ![menu](/images/menu.png)
-  - 2 つ目の引数は vm 側で定義した変数の名前
-  - 3 つ目の引数は実際に渡す値
-  - 4 つ目の引数は不明。無くても問題ない
-  ```js
-  converter.addField(block, "TEXT1", "32");
-  ```
-- `converter.addFieldInput`
-  - ブロックの入るメニュー<br>
-    ![menu-block](/images/menu-block.png)
-  - 2 つ目の引数は vm 側で定義した変数の名前
-  - 3 つ目の引数は `ruby-generator`で定義したメニューの名前
-  - 4 つ目の引数は vm 側の`menus`で定義したメニューの名前
-  - 5 つ目の引数は実際に渡す値
-  - 6 つ目の引数は不明、デフォルト値?
-  ```js
-  converter.addFieldInput(
-    block,
-    "TEXT2",
-    "kanirobo2_menu_menu1",
-    "menu1",
-    args[0].value,
-    "0"
-  );
-  ```
-- `converter.addInput`
-  - 特殊
+インスタンスメソッドを作成するときに用います。
+
+メソッド名とブロックの形は`createBlock`を参照
+
+### addTextInput
+
+```js
+converter.addTextInput(block, 引数名, 渡す値, デフォルト値？);
+```
+
+ブロックに引数(文字列もしくはブロック)を渡します。
+
+1 つ目の引数は 引数を渡すブロック。基本的に`block`のままで問題ない<br>
+2 つ目の引数は vm 側の`arguments`で決めた引数名<br>
+3 つ目の引数は 実際に渡す値、基本的には`args[n]`という形になる<br>
+4 つ目の引数は 不明、デフォルト値?<br>
+
+### addNumberInput
+
+```js
+converter.addNumberInput(block, 引数名, 'math_number', 渡す値, デフォルト値？);
+```
+
+ブロックに引数(数字もしくはブロック)を渡します。
+
+1 つ目の引数は 引数を渡すブロック。基本的に`block`のままで問題ない<br>
+2 つ目の引数は vm 側の`arguments`で決めた引数名<br>
+3 つ目の引数は 不明。`math_number`しか見たことがない<br>
+4 つ目の引数は 実際に渡す値、基本的には`args[n]`という形になる<br>
+5 つ目の引数は 不明、デフォルト値?<br>
+
+### addFieldInput
+
+```js
+converter.addFieldInput(block, 引数名, gui側メニュー名, vm側メニュー名, 渡す値, デフォルト値？);
+```
+
+ブロックに引数(メニューもしくはブロック)を渡します。<br>
+ブロックを引数に持てるタイプのメニューに引数を渡すことが可能です。<br>
+![menu](/images/menu-block.png)
+
+1 つ目の引数は 引数を渡すブロック。基本的に`block`のままで問題ない<br>
+2 つ目の引数は vm 側の`arguments`で決めた引数名<br>
+3 つ目の引数は gui 側で定義したメニューの名前<br>
+4 つ目の引数は vm 側の`menus`で定義したメニュー名<br>
+4 つ目の引数は 実際に渡す値、基本的には`args[n]`という形になる<br>
+5 つ目の引数は 不明、デフォルト値?<br>
+
+### addField
+
+```js
+converter.addField(block, 引数名, 渡す値, デフォルト値？);
+```
+
+ブロックに引数(メニュー)を渡します。<br>
+ブロックを引数に持てないタイプのメニューに引数を渡すことが可能です。<br>
+![menu](/images/menu.png)
+
+1 つ目の引数は 引数を渡すブロック。基本的に`block`のままで問題ない<br>
+2 つ目の引数は vm 側の`arguments`で決めた引数名<br>
+3 つ目の引数は 実際に渡す値、基本的には`args[n]`という形になる<br>
+4 つ目の引数は 不明、デフォルト値? なくても問題ない<br>
+
+### addInput
+
+```js
+converter.addInput(block, 引数名, 渡す値, デフォルト値？);
+```
+
+不明
