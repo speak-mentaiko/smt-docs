@@ -124,7 +124,7 @@ ruby タブでコードを補完してくれる機能<br>
 
 ### 例
 
-![snippets](/images/snippets.png)
+![snippets](/images/snippets-case.png)
 
 ```json
 "snippet": "microbit.display_text(\"こんにちは!\")",
