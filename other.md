@@ -323,5 +323,3 @@ converter.isNumberOrBlock(args[0]);
 - `converter.addInput`
 
   - 特殊
-
-- `colour_picker` - カラーコード

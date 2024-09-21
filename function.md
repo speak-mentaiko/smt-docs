@@ -105,6 +105,8 @@ const block = converter.createBlock(メソッド名, ブロックの形);
 ブロックの形は以下のようなものがあります<br>
 `value`<br>
 ![value](/images/valueblock.png)<br>
+`value_boolean`<br>
+![alt text](/images/value-booleanblock.png)<br>
 `statement`<br>
 ![statement](/images/statementblock.png)<br>
 `hat`<br>
@@ -123,7 +125,7 @@ converter.createRubyExpressionBlock(インスタンス名, node);
 
 インスタンス名は以下のような制限があります<br>
 
-- 大文字は使えない
+- 大文字は使えない(違うかも)
 - `=`、`.`、`[]`、`()`などの記号は使えない
 
 `node`は`params`から分割代入します
