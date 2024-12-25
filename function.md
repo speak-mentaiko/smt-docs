@@ -32,7 +32,7 @@ converter.registerCallMethodWithBlock(
   インスタンス名,
   メソッド名,
   上の引数の数,
-  下の引数の数, //たぶん
+  下の引数の数, // たぶん
   (params) => {}
 );
 ```
@@ -49,8 +49,7 @@ converter.isString(確認する値);
 ```
 
 引数が文字列か確認します。
-
-引数には基本的に`args[n]`を入れます
+引数には基本的に`args[n]`を入れます。
 
 ### isNumber
 
@@ -59,8 +58,7 @@ converter.isNumber(確認する値);
 ```
 
 引数が数字か確認します。
-
-引数には基本的に`args[n]`を入れます
+引数には基本的に`args[n]`を入れます。
 
 ### isBlock
 
@@ -78,8 +76,7 @@ converter.isStringOrBlock(確認する値);
 ```
 
 引数が文字列もしくはブロックか確認します。
-
-引数には基本的に`args[n]`を入れます
+引数には基本的に`args[n]`を入れます。
 
 ### isNumberOrBlock
 
@@ -88,8 +85,7 @@ converter.isNumberOrBlock(確認する値);
 ```
 
 引数が数字もしくはブロックか確認します。
-
-引数には基本的に`args[n]`を入れます
+引数には基本的に`args[n]`を入れます。
 
 ### createBlock
 
@@ -103,13 +99,13 @@ const block = converter.createBlock(メソッド名, ブロックの形);
 2 つ目の引数はブロックの形
 
 ブロックの形は以下のようなものがあります<br>
-`value`<br>
+- `value`<br>
 ![value](/images/valueblock.png)<br>
-`value_boolean`<br>
+- `value_boolean`<br>
 ![alt text](/images/value-booleanblock.png)<br>
-`statement`<br>
+- `statement`<br>
 ![statement](/images/statementblock.png)<br>
-`hat`<br>
+- `hat`<br>
 ![alt text](/images/hatblock.png)
 
 ### createRubyExpressionBlock
@@ -168,7 +164,18 @@ converter.addNumberInput(block, 引数名, 'math_number', 渡す値, デフォ�
 
 1 つ目の引数は 引数を渡すブロック。基本的に`block`のままで問題ない<br>
 2 つ目の引数は vm 側の`arguments`で決めた引数名<br>
-3 つ目の引数は 不明。`math_number`しか見たことがない<br>
+3 つ目は不明、~~`math_number`以外見たことない~~
+  - `math_number`
+    - 実数?
+  - `math_positive_number`
+    - 正の実数？負の数も渡せるため不明
+  - `math_whole_number`
+    - 整数？整数以外も渡せるため不明
+  - `math_integer`
+    - 整数？整数以外も渡せるため不明
+  - `math_angle`
+    - 0~360(たぶん)<br>`% 360`の処理が掛かる？
+
 4 つ目の引数は 実際に渡す値。基本的には`args[n]`という形になる<br>
 5 つ目の引数は 不明。デフォルト値?<br>
 
@@ -188,6 +195,27 @@ converter.addFieldInput(block, 引数名, gui側メニュー名, vm側メニュ�
 4 つ目の引数は vm 側の`menus`で定義したメニュー名<br>
 4 つ目の引数は 実際に渡す値。基本的には`args[n]`という形になる<br>
 5 つ目の引数は 不明。デフォルト値?<br>
+
+特殊<br>
+![alt text](/images/color-block.png)<br>
+カラーパレットに変換も可能
+
+```js
+converter.addFieldInput(
+  block,
+  "COLOR",
+  "colour_picker",
+  "COLOUR",
+  args[0],
+  "#43066f"
+);
+```
+
+2 つ目の引数は vm 側で定義した変数の名前<br>
+3 つ目の引数は `colour_picker`固定<br>
+4 つ目の引数は `COLOUR`固定？<br>
+5 つ目の引数は実際に渡す値<br>
+6 つ目の引数は不明、デフォルト値?<br>
 
 ### addField
 

@@ -3,7 +3,7 @@
 [旧版資料](https://github.com/gfd-dennou-club/smt-gui/wiki/SmT-gui-blockgen)
 
 上記の資料では変換できないので新たに資料を作成する。<br>
-またメモ程度なのでそこまで期待しないでもらいたい。
+またメモ程度なのでそこまで期待しないでね。
 
 ## 実装方法
 
@@ -42,3 +42,13 @@ onSend: function (receiver, name, args, rubyBlockArgs, rubyBlock, variable) {
     return block;
 },
 ```
+
+## ブロックの生成
+
+### 引数がない場合
+
+```js
+ block = this._createBlock(ruby-generator側で定義したメソッド名, ブロックの形);
+```
+
+
