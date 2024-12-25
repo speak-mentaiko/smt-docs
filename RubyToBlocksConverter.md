@@ -168,8 +168,8 @@ const SampleConverter = {
       if (!converter.isStringOrBlock(args[2])) return null;
 
       const block = converter.createBlock("sample_command3", "statement");
-      converter.addFieldInput(block, "TEXT1", "sample_menu_menu1", "menu1", args[1].value, "hoge");
-      converter.addFieldInput(block, "NUM1", "sample_menu_menu2", "menu2", args[2].value, "-1");
+      converter.addFieldInput(block, "TEXT1", "sample_menu_menu1", "menu1", args[1], "hoge");
+      converter.addFieldInput(block, "NUM1", "sample_menu_menu2", "menu2", args[2], "-1");
       return block;
     });
   },

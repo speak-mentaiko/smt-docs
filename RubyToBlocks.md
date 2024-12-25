@@ -8,7 +8,7 @@
 `smt-gui/src/lib/ruby-to-blocks-converter/`以下にファイルを作成します。<br>
 その際の名前はブロックから Ruby への変換で作ったファイルと同じにしておきます。
 名前に関しては制限があるなどではなく、正変換との対応を分かりやすくするため同じにします。<br>
-変換の詳細については[別ページ](./conversion.md)にまとめます。<br>
+変換の詳細については[別ページ](./RubyToBlocksConverter.md)にまとめます。<br>
 
 sample.js
 
