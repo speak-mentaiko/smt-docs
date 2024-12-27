@@ -11,7 +11,7 @@ ruby タブでコードを補完してくれる機能<br>
 
 `smt-gui/src/containers/ruby-tab/`に`sample-snippets.json`を作成します。
 
-```json
+```jsonc
 {
   "command0": {
     "snippet": "puts \"command0\"",
@@ -56,7 +56,7 @@ const snippetsList = [
 
 書く内容は以下のようになる
 
-```json
+```jsonc
 {
   "メソッド名": {
     "snippet": "簡単なメソッドの例",
@@ -69,13 +69,13 @@ const snippetsList = [
 
 ![snippets](/images/snippets-case.png)
 
-```json
+```jsonc
 "snippet": "microbit.display_text(\"こんにちは!\")",
 ```
 
 ![code](/images/snippets-code.png)
 
-```json
+```jsonc
 "description": "(こんにちは!)を表示する"
 ```
 

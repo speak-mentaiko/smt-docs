@@ -66,6 +66,7 @@ Generator.sample_value1 = function (block) {
 返すコードによって`order`の中身を変える<br>
 この場合は積を計算するため`ORDER_MULTIPLICATIVE`を使用する。<br>
 このほかの`order`は`ruby-generator/index.js`に記述があるので、それを参考にする。<br>
+[その他](./function.md#order-シリーズ)
 
 ### クラス定義
 
@@ -80,7 +81,6 @@ Generator.sample_command0 = function () {
 ```
 
 `Generator.prepares_["sample"]`を使うことで別の関数を呼び出すことができる。<br>
-> ただし`command0`に対応するブロックを複数呼び出しても、`init`は一度しか呼ばれないので注意が必要。
 
 ### メニュー定義
 

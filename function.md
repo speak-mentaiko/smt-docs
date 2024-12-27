@@ -3,7 +3,7 @@
 逆変換に用いられる関数の使い方を簡単に上げておきます。
 間違っていたり、無いものがありますが許してください。
 
-## converter クラス
+## Ruby -> Block で使う関数
 
 ### registerCallMethod
 
@@ -99,14 +99,15 @@ const block = converter.createBlock(メソッド名, ブロックの形);
 2 つ目の引数はブロックの形
 
 ブロックの形は以下のようなものがあります<br>
+
 - `value`<br>
-![value](/images/valueblock.png)<br>
+  ![value](/images/valueblock.png)<br>
 - `value_boolean`<br>
-![alt text](/images/value-booleanblock.png)<br>
+  ![alt text](/images/value-booleanblock.png)<br>
 - `statement`<br>
-![statement](/images/statementblock.png)<br>
+  ![statement](/images/statementblock.png)<br>
 - `hat`<br>
-![alt text](/images/hatblock.png)
+  ![alt text](/images/hatblock.png)
 
 ### createRubyExpressionBlock
 
@@ -165,16 +166,17 @@ converter.addNumberInput(block, 引数名, 'math_number', 渡す値, デフォ�
 1 つ目の引数は 引数を渡すブロック。基本的に`block`のままで問題ない<br>
 2 つ目の引数は vm 側の`arguments`で決めた引数名<br>
 3 つ目は不明、~~`math_number`以外見たことない~~
-  - `math_number`
-    - 実数?
-  - `math_positive_number`
-    - 正の実数？負の数も渡せるため不明
-  - `math_whole_number`
-    - 整数？整数以外も渡せるため不明
-  - `math_integer`
-    - 整数？整数以外も渡せるため不明
-  - `math_angle`
-    - 0~360(たぶん)<br>`% 360`の処理が掛かる？
+
+- `math_number`
+  - 実数?
+- `math_positive_number`
+  - 正の実数？負の数も渡せるため不明
+- `math_whole_number`
+  - 整数？整数以外も渡せるため不明
+- `math_integer`
+  - 整数？整数以外も渡せるため不明
+- `math_angle`
+  - 0~360(たぶん)<br>`% 360`の処理が掛かる？
 
 4 つ目の引数は 実際に渡す値。基本的には`args[n]`という形になる<br>
 5 つ目の引数は 不明。デフォルト値?<br>
@@ -239,3 +241,181 @@ converter.addInput(block, 引数名, 渡す値, デフォルト値？);
 ```
 
 不明
+
+# Block -> Ruby で使う関数,変数
+
+ドキュメントがないため一部は[Blockly](https://developers.google.com/blockly/guides/create-custom-blocks/code-generation/overview?hl=ja)のドキュメントを参考に書いています。
+
+### prepares\_
+
+```js
+Generator.prepares_[`適当な名前`] = Generator.別の定義;
+```
+
+定義した別関数を呼び出すことができます。<br>
+`prepares_["適当な名前"]`は block->Ruby に変換した際 1 度だけ呼び出されます。
+
+### valueToCode
+
+```js
+Generator.valueToCode(block, 引数名, 評価順?);
+```
+
+ブロックから引数を取得することができます。
+
+1 つ目の引数は 引数を取得するブロック。基本的に`block`のままで問題ない<br>
+2 つ目の引数は vm 側の`arguments`で決めた引数名<br>
+3 つ目の引数は 評価順的なもの?。基本的には`ORDER_ATOMIC`,`ORDER_NONE`を使う。
+
+## ORDER シリーズ
+
+評価順?のマジックナンバー<br>
+基本的に上から順番に評価順が高い
+
+### Generator.ORDER_ATOMIC
+
+- 0 "" ...
+- 一番初めに評価される
+
+```js
+return ["value0", Generator.ORDER_ATOMIC];
+```
+
+基本的に値ブロックはこの変数を使う。<br>
+返す文字列にかっこを含む(メソッド)を返す場合は[`ORDER_FUNCTION_CALL`](#generatororder_function_call)を使う。
+
+### Generator.ORDER_COLLECTION
+
+- tuples, lists, dictionaries
+- scratch の list にのみ使われている
+
+### Generator.ORDER_STRING_CONVERSION
+
+- `expression...`
+- 使われていないので不明
+
+### Generator.ORDER_MEMBER
+
+- ::
+- 使われていないため不明
+
+### Generator.ORDER_INDEX
+
+- []
+- 配列の要素
+
+### Generator.ORDER_FUNCTION_CALL
+
+- ()
+- 通常ブロックの形以外でメソッドを呼び出す際に使う
+  ![menu](/images/functioncall.png)
+
+### Generator.ORDER_UNARY_SIGN
+
+- +(単項) ! ~
+- 否定演算子などに使われる?
+
+### Generator.ORDER_EXPONENTIATION
+
+- \*\*
+- 使われていないため不明
+
+### Generator.ORDER_UNARY_MINUS_SIGN
+
+- -(単項)
+- 使われていないため不明
+
+### Generator.ORDER_MULTIPLICATIVE
+
+- \* / %
+- 積,商,余り
+
+### Generator.ORDER_ADDITIVE
+
+- \+ -
+- 和,差
+
+### Generator.ORDER_BITWISE_SHIFT
+
+- << >>
+- 使われていないため不明
+- ビット操作?
+
+### Generator.ORDER_BITWISE_AND
+
+- &
+- 使われていないため不明
+- ビット操作?
+
+### Generator.ORDER_BITWISE_XOR
+
+- ^
+- 使われていないため不明
+- ビット操作?
+
+### Generator.ORDER_BITWISE_OR
+
+- |
+- 使われていないため不明
+- ビット操作?
+
+### Generator.ORDER_RELATIONAL
+
+- \> >= < <=
+- 比較
+
+### Generator.ORDER_EQUALS
+
+- <=> == === != =~ !~
+- 比較
+
+### Generator.ORDER_LOGICAL_AND
+
+- &&
+- かつ
+
+### Generator.ORDER_LOGICAL_OR
+
+- ||
+- または
+
+### Generator.ORDER_RANGE
+
+- .. ...
+- range
+
+### Generator.ORDER_CONDITIONAL
+
+- ?:(条件演算子)
+- 使われていないため不明
+- 三項演算子?
+
+### Generator.ORDER_ASSIGNMENT
+
+- =(+=, -= ... )
+- 使われていないため不明
+- 代入演算子?
+
+### Generator.ORDER_NOT
+
+- not
+- 使われていないため不明
+
+### Generator.ORDER_AND_OR
+
+- and or
+- 使われていないため不明
+
+### Generator.ORDER_NONE
+
+- (...)
+- 通常ブロックの形でメソッドを呼び出す際に使う
+
+```js
+Generator.sample_command1 = function (block) {
+  const text =
+    Generator.valueToCode(block, "TEXT", Generator.ORDER_NONE) || null;
+  const num = Generator.valueToCode(block, "NUM", Generator.ORDER_NONE) || 0;
+  return `puts(command1, ${text}, ${num})\n`;
+};
+```
