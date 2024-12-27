@@ -291,7 +291,7 @@ return ["value0", Generator.ORDER_ATOMIC];
 
 ### Generator.ORDER_STRING_CONVERSION
 
-- `expression...`
+- \`expression...`
 - 使われていないので不明
 
 ### Generator.ORDER_MEMBER
@@ -307,7 +307,7 @@ return ["value0", Generator.ORDER_ATOMIC];
 ### Generator.ORDER_FUNCTION_CALL
 
 - ()
-- 通常ブロックの形以外でメソッドを呼び出す際に使う
+- 通常ブロックの形以外でメソッドを呼び出す際に使う<br>
   ![menu](/images/functioncall.png)
 
 ### Generator.ORDER_UNARY_SIGN
