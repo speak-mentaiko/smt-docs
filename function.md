@@ -242,7 +242,7 @@ converter.addInput(block, 引数名, 渡す値, デフォルト値？);
 
 不明
 
-# Block -> Ruby で使う関数,変数
+## Block -> Ruby で使う関数,変数
 
 ドキュメントがないため一部は[Blockly](https://developers.google.com/blockly/guides/create-custom-blocks/code-generation/overview?hl=ja)のドキュメントを参考に書いています。
 
