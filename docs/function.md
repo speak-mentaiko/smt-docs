@@ -274,7 +274,7 @@ Generator.valueToCode(block, 引数名, 評価順?);
 
 ### Generator.ORDER_ATOMIC
 
-- 0 "" ...
+- `0` `""`
 - 一番初めに評価される
 
 ```js
@@ -291,124 +291,124 @@ return ["value0", Generator.ORDER_ATOMIC];
 
 ### Generator.ORDER_STRING_CONVERSION
 
-- \`expression...`
+- `expression...`
 - 使われていないので不明
 
 ### Generator.ORDER_MEMBER
 
-- ::
+- `::`
 - 使われていないため不明
 
 ### Generator.ORDER_INDEX
 
-- []
+- `[]`
 - 配列の要素
 
 ### Generator.ORDER_FUNCTION_CALL
 
-- ()
+- `()`
 - 通常ブロックの形以外でメソッドを呼び出す際に使う<br>
   ![menu](/images/functioncall.png)
 
 ### Generator.ORDER_UNARY_SIGN
 
-- +(単項) ! ~
+- `+(単項)` `!` `~`
 - 否定演算子などに使われる?
 
 ### Generator.ORDER_EXPONENTIATION
 
-- \*\*
+- `**`
 - 使われていないため不明
 
 ### Generator.ORDER_UNARY_MINUS_SIGN
 
-- -(単項)
+- `-(単項)`
 - 使われていないため不明
 
 ### Generator.ORDER_MULTIPLICATIVE
 
-- \* / %
+- `*` `/` `%`
 - 積,商,余り
 
 ### Generator.ORDER_ADDITIVE
 
-- \+ -
+- `+` `-`
 - 和,差
 
 ### Generator.ORDER_BITWISE_SHIFT
 
-- << >>
+- `<<` `>>`
 - 使われていないため不明
 - ビット操作?
 
 ### Generator.ORDER_BITWISE_AND
 
-- &
+- `&`
 - 使われていないため不明
 - ビット操作?
 
 ### Generator.ORDER_BITWISE_XOR
 
-- ^
+- `^`
 - 使われていないため不明
 - ビット操作?
 
 ### Generator.ORDER_BITWISE_OR
 
-- |
+- `|`
 - 使われていないため不明
 - ビット操作?
 
 ### Generator.ORDER_RELATIONAL
 
-- \> >= < <=
+- `>` `>=` `<` `<=`
 - 比較
 
 ### Generator.ORDER_EQUALS
 
-- <=> == === != =~ !~
+- `<=>` `==` `===` `!=` `=~` `!~`
 - 比較
 
 ### Generator.ORDER_LOGICAL_AND
 
-- &&
+- `&&`
 - かつ
 
 ### Generator.ORDER_LOGICAL_OR
 
-- ||
+- `||`
 - または
 
 ### Generator.ORDER_RANGE
 
-- .. ...
+- `..` `...`
 - range
 
 ### Generator.ORDER_CONDITIONAL
 
-- ?:(条件演算子)
+- `?:(条件演算子)`
 - 使われていないため不明
 - 三項演算子?
 
 ### Generator.ORDER_ASSIGNMENT
 
-- =(+=, -= ... )
+- `=(+=, -= ... )`
 - 使われていないため不明
 - 代入演算子?
 
 ### Generator.ORDER_NOT
 
-- not
+- `not`
 - 使われていないため不明
 
 ### Generator.ORDER_AND_OR
 
-- and or
+- `and` `or`
 - 使われていないため不明
 
 ### Generator.ORDER_NONE
 
-- (...)
+- `(...)`
 - 通常ブロックの形でメソッドを呼び出す際に使う
 
 ```js
