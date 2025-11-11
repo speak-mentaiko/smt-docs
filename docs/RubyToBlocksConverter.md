@@ -116,7 +116,7 @@ if (!converter.isNumberOrBlock(args[0])) return null;
 if (!args[0].value === "command1") return null;
 ```
 
-などのようにする
+などのようにします。
 <br>
 
 ```js
@@ -183,6 +183,34 @@ converter.addNumberInput(block, "NUM", "math_number", args[0], 2);
 - `converter.addInput`
   - 不明
   - 特殊型?
+
+## `args`の取り方
+
+基本的な取り方としては`args[0]`のように取ります。
+
+```js
+swap(num1, num2);
+```
+
+というメソッドがあった場合、<br>
+1 つ目の引数を取る場合は`args[0]`となります。<br>
+2 つ目の引数を取る場合は`args[1]`となります。<br>
+
+```js
+swap(first: num1, second: num2, third: num3)
+```
+
+というメソッドがあった場合、<br>
+1 つ目の引数を取る場合は`args[0].get('sym:first')`となります。<br>
+2 つ目の引数を取る場合は`args[0].get('sym:second')`となります。<br>
+3 つ目の引数を取る場合は`args[0].get('sym:third')`となります。<br>
+
+ハッシュは 1 つの変数としてカウントされます
+
+また引数の値を読み取る場合は`args[0].value`という風に取ります。<br>
+引数に入っているのが値かブロックか分からないため、基本的に型の確認や引数を渡す際は`args[0]`といった形で渡しましょう。<br>
+ただブロックを受け入れない場合などは`args[0].value`といった形で問題ありません。<br>
+<br>
 
 # インスタンスメソッド
 

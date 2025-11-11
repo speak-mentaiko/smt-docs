@@ -20,7 +20,7 @@
 
 ## その他
 
-- [補完機能](/docs/other.md)
+- [補完機能](/docs/complement.md)
 - [関数](/docs/function.md)
 
 補完機能など変換以外のこと？を書いています
