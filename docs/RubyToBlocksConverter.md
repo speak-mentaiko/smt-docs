@@ -106,9 +106,11 @@ if (!converter.isNumberOrBlock(args[0])) return null;
 - `isStringOrBlock`
   - ブロックもしくは文字列
 - `isNumber`
-  - 数字のみ -`isString`
+  - 数字のみ
+- `isString`
   - 文字列のみ
-    また特定の文字列などの場合
+- `isBlock`
+  - ブロック
 
 特定の文字列などのみの場合は
 
@@ -262,8 +264,8 @@ converter.registerCallMethod("self", "tools", 0, (params) => {
 ## インスタンスメソッド
 
 ```js
-converter.registerCallMethod("tools", "puts", 0, (params) => {
-  const { receiver, node } = params;
+converter.registerCallMethod("tools", "puts", 1, (params) => {
+  const { receiver, args, node } = params;
 
   if (!converter.isStringOrBlock(args[0])) return null;
 
@@ -306,3 +308,11 @@ converter.registerCallMethod("tools", "x=", 1, (params) => {
 ```js
 tools.x = 10;
 ```
+
+# 代入式
+
+coming soon
+
+# Block について
+
+coming soon
