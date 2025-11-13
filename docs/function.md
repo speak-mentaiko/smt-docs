@@ -66,8 +66,8 @@ converter.isNumber(確認する値);
 converter.isBlock(確認する値);
 ```
 
-不明<br>
-名前からしてブロックか確認？
+引数がブロックか確認します。
+引数には基本的に`args[n]`を入れます。
 
 ### isStringOrBlock
 
@@ -105,7 +105,7 @@ const block = converter.createBlock(メソッド名, ブロックの形);
 - `value_boolean`<br>
   ![alt text](/images/value-booleanblock.png)<br>
 - `statement`<br>
-  ![statement](/images/statementblock.png)<br>
+  ![statement](/images/statement-block.png)<br>
 - `hat`<br>
   ![alt text](/images/hatblock.png)
 
@@ -140,7 +140,7 @@ converter.changeRubyExpressionBlock(receiver, メソッド名, ブロックの�
 3 つ目の引数はブロックの形<br>
 
 `receiver`は`params`から分割代入します<br>
-メソッド名とブロックの形は`createBlock`を参照
+メソッド名とブロックの形は[`createBlock`](#createblock)を参照
 
 ### addTextInput
 
@@ -261,11 +261,26 @@ Generator.prepares_[`適当な名前`] = Generator.別の定義;
 Generator.valueToCode(block, 引数名, 評価順?);
 ```
 
-ブロックから引数を取得することができます。
+ブロックから引数を取得することができます。<br>
+四角いタイプのメニュー以外から値を得ることができます
+
 
 1 つ目の引数は 引数を取得するブロック。基本的に`block`のままで問題ない<br>
 2 つ目の引数は vm 側の`arguments`で決めた引数名<br>
 3 つ目の引数は 評価順的なもの?。基本的には`ORDER_ATOMIC`,`ORDER_NONE`を使う。
+
+### getFieldValue
+
+```js
+Generator.getFieldValue(block, 引数名)
+```
+
+ブロックから引数を取得することができます。<br>
+四角いタイプのメニューから値を得ることができます
+
+1 つ目の引数は 引数を取得するブロック。基本的に`block`のままで問題ない<br>
+2 つ目の引数は vm 側の`arguments`で決めた引数名<br>
+
 
 ## ORDER シリーズ
 

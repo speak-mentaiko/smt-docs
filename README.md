@@ -1,6 +1,6 @@
 # SmT 変換ドキュメント
 
-[SmT](https://github.com/gfd-dennou-club/smt-gui)での Ruby -> Block,Block -> Ruby の変換に対するドキュメントです<br>
+[SmT](https://github.com/gfd-dennou-club/smt-gui)での Ruby -> Block, Block -> Ruby の変換に対するドキュメントです<br>
 
 **内容が一部正しくない,未確認などあります**
 
