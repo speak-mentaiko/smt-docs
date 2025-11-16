@@ -294,7 +294,9 @@ converter.registerCallMethod("tools", "puts", 1, (params) => {
 3 つ目の引数がブロックの形<br>
 となります。
 
-## その他
+# 代入式
+
+## 通常
 
 ```js
 converter.registerCallMethod("tools", "x=", 1, (params) => {
@@ -309,9 +311,80 @@ converter.registerCallMethod("tools", "x=", 1, (params) => {
 tools.x = 10;
 ```
 
-# 代入式
+## メソッドの場合
 
-coming soon
+代入する値がメソッドなどの場合は以下のようになります
+
+変換する Ruby コード
+
+```ruby
+sample = Sample.new()
+```
+
+変換するためのコード
+
+```js
+const SampleConverter = {
+  register: function (converter) {
+    converter.registerCallMethod("self", "Sample", 0, (params) => {
+      const { node } = params;
+      return converter.createRubyExpressionBlock("Sample", node);
+    });
+
+    converter.registerCallMethod("Sample", "new", 0, (params) => {
+      const { node } = params;
+      return converter.createRubyExpressionBlock("Sample.new()", node);
+    });
+  },
+  onVasgn: function (scope, variable, rh) {
+    const expression = this._getRubyExpression(rh);
+
+    if (!expression) return null;
+    if (variable.name === "sample");
+
+    return this._changeRubyExpressionBlock(rh, "sample_init", "statement");
+  },
+};
+```
+
+### 詳細
+
+```js
+register: function(converter) {
+```
+
+この中で`Sample.new()`を解決します<br>
+内容については[インスタンス](#インスタンスメソッド)を見てください
+
+```js
+onVasgn: function (scope, variable, rh) {
+```
+
+この中で代入式`sample =`を解決します<br>
+`scope`は`locak`や`global`といった変数のスコープ<br>
+`variable`は左辺<br>
+`rh`は右辺<br>
+が入ってきます
+
+```js
+const expression = this._getRubyExpression(rh);
+```
+
+`register:function`で解決した`Sample.new()`を取り出します<br>
+
+```js
+if (!expression) return null;
+if (variable.name === "sample");
+```
+
+正しく入っているか確認します
+
+```js
+return this._changeRubyExpressionBlock(rh, "sample_init", "statement");
+```
+
+内容は割愛します<br>
+[インスタンス](#インスタンスメソッド)を見てください
 
 # Block について
 
