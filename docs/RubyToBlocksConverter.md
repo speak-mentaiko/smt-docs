@@ -361,7 +361,7 @@ onVasgn: function (scope, variable, rh) {
 ```
 
 この中で代入式`sample =`を解決します<br>
-`scope`は`locak`や`global`といった変数のスコープ<br>
+`scope`は`local`や`global`といった変数のスコープ<br>
 `variable`は左辺<br>
 `rh`は右辺<br>
 が入ってきます
