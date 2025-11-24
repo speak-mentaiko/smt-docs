@@ -38,7 +38,7 @@ converter.registerCallMethod("GPIO", "new", 2, (params) => {
 ```
 
 `GPIO.new( 25, GPIO::OUT )`をいったん作成<br>
-1 つ目の引数がピン番号なので数字かつ`25`,`32`であることを確認
+1 つ目の引数がピン番号なので数字かつ`25`,`32`であることを確認<br>
 代入式が残っているので`createRubyExpressionBlock`
 
 ### `gpio25 =`
@@ -90,9 +90,13 @@ onVasgn: function (scope, variable, rh) {
 onVasgn: function (scope, variable, rh) {
 ```
 
-- `scope`には代入される変数のスコープが入る<br>`local`,`global`,`instance`などがある
-- `variable`には左辺が入る
-- `rh`には右辺が入る
+- `scope`
+  - 代入される変数のスコープ<br>
+    `local`,`global`,`instance`などがある
+- `variable`
+  - 左辺
+- `rh`
+  - 右辺
 
 ```js
 const expression = this._getRubyExpression(rh);
@@ -131,4 +135,125 @@ this._addField(block, "TEXT", match[1]);
 ```
 
 ブロックの生成<br>
-変数の代入
+引数の代入
+
+## `gpio25.write( 1 )`
+
+```js
+onSend: function (receiver, name, args, rubyBlockArgs, rubyBlock, node) {
+    const receiverName = (() => {
+        if (this._isRubyArgument(receiver)) {
+            return receiver.fields.VALUE.value;
+        } else if (this._isRubyExpression(receiver)) {
+            return this._getRubyExpression(receiver);
+        } else {
+            return null;
+        }
+    })();
+
+    if (!receiverName) return null;
+
+    switch (name) {
+        // gpio.write
+        case 'write': {
+            const match = receiverName.match(/^gpio(\d+)$/);
+
+            if (match && args.length === 1) {
+                const pin = match[1];
+
+                if (!this.isNumber(args[0])) return null;
+                if (args[0].value !== 0 && args[0].value !== 1) return null;
+
+                const block = (() => {
+                    if (this._isRubyExpression(receiver)) {
+                        return this._changeRubyExpressionBlock(
+                            receiver,
+                            'kanirobo2_command4',
+                            'statement'
+                        );
+                    } else {
+                        return this._changeBlock(receiver, 'kanirobo2_command4', 'statement');
+                    }
+                })();
+
+                this._addField(block, 'TEXT1', pin);
+                this._addField(block, 'TEXT2', args[0].value);
+                return block;
+            }
+            break;
+        }
+```
+
+`gpio25`の部分は`gpio25 = GPIO.new( 25, GPIO::OUT )`で作っているので割愛
+
+```js
+onSend: function (receiver, name, args, rubyBlockArgs, rubyBlock, node) {
+```
+
+- `receiver`
+  - レシーバー<br>
+    ここでは`gpio25`の部分
+- `name`
+  - メソッド名<br>
+    ここでは`write`の部分
+- `args`
+  - 引数
+- `rubyBlockArgs`
+  - 不明
+- `rubyBlock`
+  - 不明
+- `node`
+  - 構文木
+
+インスタンスメソッドのみの変換では`registerCallMethod`で良いが,
+インスタンス作成の代入式と同時に変換しようとするとうまくいかないので`onSend`を使う
+
+> [!TIP]
+> 代入式があると`gpio25`がローカル変数として解釈されインスタンスメソッドとして変換ができない
+
+```js
+const receiverName = (() => {
+  if (this._isRubyArgument(receiver)) {
+    return receiver.fields.VALUE.value;
+  } else if (this._isRubyExpression(receiver)) {
+    return this._getRubyExpression(receiver);
+  } else {
+    return null;
+  }
+})();
+```
+
+`gpio25`の部分の取り出し<br>
+単体だと`expression`になるが代入と同時にすると変数として扱われるため場合分けする
+
+```js
+const match = receiverName.match(/^gpio(\d+)$/);
+// 省略
+const pin = match[1];
+
+if (!this.isNumber(args[0])) return null;
+if (args[0].value !== 0 && args[0].value !== 1) return null;
+```
+
+`gpio25`から 25 の部分を取り出す<br>
+引数が正しいかを確認
+
+```js
+const block = (() => {
+  if (this._isRubyExpression(receiver)) {
+    return this._changeRubyExpressionBlock(
+      receiver,
+      "kanirobo2_command4",
+      "statement"
+    );
+  } else {
+    return this._changeBlock(receiver, "kanirobo2_command4", "statement");
+  }
+})();
+
+this._addField(block, "TEXT1", pin);
+this._addField(block, "TEXT2", args[0]);
+```
+
+ブロックの生成と引数の追加<br>
+`expression`だった場合とそうでない場合では作り方が違うため分岐
