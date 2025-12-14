@@ -5,242 +5,407 @@
 
 ## Ruby -> Block で使う関数
 
-### registerCallMethod
+### `registerCallMethod`
 
-```js
-converter.registerCallMethod(
-  インスタンス名,
-  メソッド名,
-  引数の数,
-  (params) => {}
-);
+```ts
+registerCallMethod(receiverName: string, name: string, numArgs: number, createBlockFunc: (params: params): block):void;
 ```
 
-基本的なブロック(`value`, `statement`, `hat`)が変換できます。
+基本的なブロック(`value`, `value_boolean`, `statement`, `hat`)が変換できます。
 
-1 つ目の引数は基本的に`self`になり、
-`command.puts`のようなインスタンスメソッドを呼び出す場合はインスタンス名になります。その場合は`command`となります。<br>
-2 つ目の引数は変換するメソッド名です。<br>
-3 つ目の引数は変換するメソッドの引数の数です。
+- `receiverName`
+  - 基本的には`self`
+  - インスタンスメソッドの場合はインスタンス名になる<br>
+    `command.puts`の場合は`command`となる
+- `name`
+  - 変換するメソッド名
+- `numArgs`
+  - 引数の数
+- `createBlockFunc`
+  - `(params) => {}`
+  - `params`を引数に持つ即時関数
+  - `params`には以下のようなものがある
+    - `receiver`
+      - レシーバ
+    - `name`
+      - メソッド名
+    - `args`
+      - 引数
+    - `rubyBlockArgs`
+      - 不明
+    - `rubyBlock`
+      - 不明
+    - `node`
+      - 構文木
 
-### registerCallMethodWithBlock
+### `registerOnSend`
+
+```ts
+registerOnSend(receiverName: string, name: string, numArgs: number, createBlockFunc: (params: params): block): void;
+```
+
+[`registerCallMethod`](#registercallmethod)と同じです
+
+### `registerCallMethodWithBlock`
 
 > 確認しきれていません
 
-```js
-converter.registerCallMethodWithBlock(
-  インスタンス名,
-  メソッド名,
-  上の引数の数,
-  下の引数の数, // たぶん
-  (params) => {}
-);
+```ts
+registerOnSendWithBlock(
+  receiverName: string,
+  name: string,
+  numArgs: number,
+  numRubyBlockArgs: number,
+  createBlockFunc: (params: params): block
+): void;
 ```
 
-`end`がつくブロックを変換可能
+`end`がつくブロックを変換可能?
 
-3 つ目までの引数は`converter.registerCallMethod`と同じです<br>
-4 つ目の引数は end 側につく引数の数？(未確認)
+- `receiverName`
+  - 基本的には`self`
+  - インスタンスメソッドの場合はインスタンス名になる<br>
+    `command.puts`の場合は`command`となる
+- `name`
+  - 変換するメソッド名
+- `numArgs`
+  - 引数の数
+- `numRubyBlockArgs`
+  - 不明
+  - `end`側につく引数の数？
+- `createBlockFunc`
+  - `(params) => {}`
+  - `params`を引数に持つ即時関数
+  - `params`には以下のようなものがある
+    - `receiver`
+      - レシーバ
+    - `name`
+      - メソッド名
+    - `args`
+      - 引数
+    - `rubyBlockArgs`
+      - 不明
+    - `rubyBlock`
+      - 不明
+    - `node`
+      - 構文木
 
-### isString
+### `isString`
 
-```js
-converter.isString(確認する値);
+```ts
+isString(value: args): boolean;
 ```
 
-引数が文字列か確認します。
+引数が文字列か確認します。<br>
 引数には基本的に`args[n]`を入れます。
 
-### isNumber
+### `isNumber`
 
-```js
-converter.isNumber(確認する値);
+```ts
+isNumber(value: args): boolean;
 ```
 
-引数が数字か確認します。
+引数が数字か確認します。<br>
 引数には基本的に`args[n]`を入れます。
 
-### isBlock
+### `isHash`
 
-```js
-converter.isBlock(確認する値);
+```ts
+isHash(value: args): boolean
 ```
 
-引数がブロックか確認します。
+引数がハッシュか確認します。<br>
 引数には基本的に`args[n]`を入れます。
 
-### isStringOrBlock
+### `isBlock`
 
-```js
-converter.isStringOrBlock(確認する値);
+```ts
+isBlock(value: args): boolean;
 ```
 
-引数が文字列もしくはブロックか確認します。
+引数がブロックか確認します。<br>
 引数には基本的に`args[n]`を入れます。
 
-### isNumberOrBlock
+### `isStringOrBlock`
 
-```js
-converter.isNumberOrBlock(確認する値);
+```ts
+isStringOrBlock(value: args): boolean;
 ```
 
-引数が数字もしくはブロックか確認します。
+引数が文字列もしくはブロックか確認します。<br>
 引数には基本的に`args[n]`を入れます。
 
-### createBlock
+### `isNumberOrBlock`
 
-```js
-const block = converter.createBlock(メソッド名, ブロックの形);
+```ts
+isNumberOrBlock(value: args): boolean;
+```
+
+引数が数字もしくはブロックか確認します。<br>
+引数には基本的に`args[n]`を入れます。
+
+### `isNumberOrStringOrBlock`
+
+```ts
+isNumberOrStringOrBlock(value: args): boolean;
+```
+
+引数が数字もしくは文字列もしくはブロックか確認します。<br>
+引数には基本的に`args[n]`を入れます
+
+### `isRubyExpression`
+
+```ts
+isRubyExpression(block: block): boolean
+```
+
+引数が式か確認します<br>
+
+### `getSource`
+
+```ts
+getSource(node: node): string
+```
+
+ブロックから Ruby コードを取得します<br>
+
+### `getRubyExpression`
+
+```ts
+getRubyExpression(block: block): string
+```
+
+式として登録したブロックから Ruby コードを取得します<br>
+
+### `createBlock`
+
+```ts
+createBlock(opcode: string, type: string, attributes = {}): block;
 ```
 
 変換するブロックを指定します。
 
-1 つ目の引数は`ruby-generator`側で定義したメソッド名<br>
-2 つ目の引数はブロックの形
+- `opcode`
+  - オペコード
+  - vm 側で決めたもの
+- `type`
+  - ブロックの形
+  - `value`<br>
+    ![value](/images/valueBlock.png)
+  - `value_boolean`<br>
+    ![value_boolean](/images/valueBooleanBlock.png)
+  - `statement`<br>
+    ![statement](/images/statementBlock.png)
+  - `hat`<br>
+    ![hat](/images/hatBlock.png)
+- `attributes`
+  - 不明
+  - 引数の値？
 
-ブロックの形は以下のようなものがあります<br>
+### `createRubyExpressionBlock`
 
-- `value`<br>
-  ![value](/images/valueblock.png)<br>
-- `value_boolean`<br>
-  ![alt text](/images/value-booleanblock.png)<br>
-- `statement`<br>
-  ![statement](/images/statement-block.png)<br>
-- `hat`<br>
-  ![alt text](/images/hatblock.png)
-
-### createRubyExpressionBlock
-
-```js
-converter.createRubyExpressionBlock(インスタンス名, node);
+```ts
+createRubyExpressionBlock(expression: string, node: node): block;
 ```
 
-インスタンス部分を作成するときに用います。
+与えられた文字列を 1 つの式として設定しておく<br>
+インスタンス部分を作成するときなどに用います。
 
-1 つ目の引数はインスタンス名<br>
-2 つ目の引数は`node`
+- `expression`
+  - 式
+  - 文字列としてあたえる
+- `node`
+  - 構文木
+  - 式に対応するノード
 
-インスタンス名は以下のような制限があります<br>
+### `changeBlock`
 
-- 大文字は使えない(違うかも)
-- `=`、`.`、`[]`、`()`などの記号は使えない
-
-`node`は`params`から分割代入します
-
-### changeRubyExpressionBlock
-
-```js
-converter.changeRubyExpressionBlock(receiver, メソッド名, ブロックの形);
+```ts
+changeBlock(block: block, opcode: string: blockType: string): block
 ```
 
+`expression`以外の式を実際のブロックに変換する<br>
+
+- `block`
+  - 変換する式
+- `opcode`
+  - 実際に変換するブロックの opcode
+  - vm 側で決めたもの
+- `blockType`
+  - ブロックの形
+  - [`createBlock`](#createblock)を参照
+
+### `changeRubyExpressionBlock`
+
+```ts
+changeRubyExpressionBlock(block: block, opcode: string, blockType: string): block;
+```
+
+`createRubyExpressionBlock`などで作った式を実際のブロックに変換する<br>
 インスタンスメソッドを作成するときに用います。
 
-1 つ目の引数は`receiver`<br>
-2 つ目の引数はメソッド名<br>
-3 つ目の引数はブロックの形<br>
+- `block`
+  - 変換する式
+- `opcode`
+  - 実際に変換するブロックの opcode
+  - vm 側で決めたもの
+- `blockType`
+  - ブロックの形
+  - [`createBlock`](#createblock)を参照
 
-`receiver`は`params`から分割代入します<br>
-メソッド名とブロックの形は[`createBlock`](#createblock)を参照
+### `removeBlock`
 
-### addTextInput
+```ts
+removeBlock(block: block): void
+```
 
-```js
-converter.addTextInput(block, 引数名, 渡す値, デフォルト値？);
+与えられたブロックを削除する
+
+```ruby
+puts( 123 % 100)
+```
+
+は`puts`をブロックとして引数を持ち、引数の`123 % 100`も`123`、`100`を引数に持つブロックとして認識される<br>
+
+このうち`123 % 100`をブロックとして認識させたくないときに使う
+
+### `addTextInput`
+
+```ts
+addTextInput(block: block, name: string, inputValue: string | args, shadowValue: string): void;
 ```
 
 ブロックに引数(文字列もしくはブロック)を渡します。
 
-1 つ目の引数は 引数を渡すブロック。基本的に`block`のままで問題ない<br>
-2 つ目の引数は vm 側の`arguments`で決めた引数名<br>
-3 つ目の引数は 実際に渡す値。基本的には`args[n]`という形になる<br>
-4 つ目の引数は 不明。デフォルト値?<br>
+- `block`
+  - `createBlock`などで作ったブロック
+- `name`
+  - vm 側で決めた変数名
+- `inputValue`
+  - 実際に渡す値
+  - `args`もしくは`string`で渡す
+- `shadowValue`
+  - デフォルト値
+  - `inputValue`に問題があった場合こちらの文字列で変換される
 
-### addNumberInput
+### `addNumberInput`
 
-```js
-converter.addNumberInput(block, 引数名, 'math_number', 渡す値, デフォルト値？);
+```ts
+addNumberInput(block: block, name: string, opcode: string, inputValue: number | args, shadowValue: number): void;
 ```
 
 ブロックに引数(数字もしくはブロック)を渡します。
 
-1 つ目の引数は 引数を渡すブロック。基本的に`block`のままで問題ない<br>
-2 つ目の引数は vm 側の`arguments`で決めた引数名<br>
-3 つ目は不明、~~`math_number`以外見たことない~~
-
-- `math_number`
+- `block`
+  - `createBlock`などで作ったブロック
+- `name`
+  - vm 側で決めた変数名
+- `opcode`
+  - 不明　以下のようにものがある
+  - `math_number`
   - 実数?
-- `math_positive_number`
-  - 正の実数？負の数も渡せるため不明
-- `math_whole_number`
-  - 整数？整数以外も渡せるため不明
-- `math_integer`
-  - 整数？整数以外も渡せるため不明
-- `math_angle`
-  - 0~360(たぶん)<br>`% 360`の処理が掛かる？
+  - `math_positive_number`
+    - 正の実数？負の数も渡せるため不明
+  - `math_whole_number`
+    - 整数？整数以外も渡せるため不明
+  - `math_integer`
+    - 整数？整数以外も渡せるため不明
+  - `math_angle`
+    - 0~360(たぶん)<br>`% 360`の処理が掛かる？
+- `inputValue`
+  - 実際に渡す値
+  - `args`もしくは`Number`で渡す
+- `shadowValue`
+  - デフォルト値
+  - `inputValue`に問題があった場合こちらの数字で変換される
 
-4 つ目の引数は 実際に渡す値。基本的には`args[n]`という形になる<br>
-5 つ目の引数は 不明。デフォルト値?<br>
+### `addNoteInput`
 
-### addFieldInput
+```ts
+addNoteInput(block: block, name: string, inputValue: number | args, shadowValue: number):void
+```
 
-```js
-converter.addFieldInput(block, 引数名, gui側メニュー名, vm側メニュー名, 渡す値, デフォルト値？);
+ブロックに引数を値(鍵盤)を渡します<br>
+![note block](/images/noteBlock.png)
+
+- `block`
+  - `createBlock`などで作ったブロック
+- `name`
+  - vm 側で決めた変数名
+- `inputValue`
+  - 実際に渡す値
+- `shadowValue`
+  - デフォルト値
+
+### `addFieldInput`
+
+```ts
+addFieldInput(block: block, name: string, opcode: string, fieldName: string, inputValue: string | args, shadowValue: string): void;
 ```
 
 ブロックに引数(メニューもしくはブロック)を渡します。<br>
 ブロックを引数に持てるタイプのメニューに引数を渡すことが可能です。<br>
-![menu](/images/menu-block.png)
+![menu](/images/menuBlock.png)
 
-1 つ目の引数は 引数を渡すブロック。基本的に`block`のままで問題ない<br>
-2 つ目の引数は vm 側の`arguments`で決めた引数名<br>
-3 つ目の引数は gui 側で定義したメニューの名前<br>
-4 つ目の引数は vm 側の`menus`で定義したメニュー名<br>
-4 つ目の引数は 実際に渡す値。基本的には`args[n]`という形になる<br>
-5 つ目の引数は 不明。デフォルト値?<br>
+- `block`
+  - `createBlock`などで作ったブロック
+- `name`
+  - vm 側で決めた変数名
+- `opcode`
+  - gui 側で定義したメニュー名
+- `fieldName`
+  - vm 側で決めたメニュー名
+- `inputValue`
+  - 実際に渡す値
+- `shadowValue`
+  - デフォルト値
+  - `inputValue`に問題があった売位こちらの値で変換される
 
 特殊<br>
-![alt text](/images/color-block.png)<br>
+![alt text](/images/colorBlock.png)<br>
 カラーパレットに変換も可能
 
-```js
-converter.addFieldInput(
-  block,
-  "COLOR",
-  "colour_picker",
-  "COLOUR",
-  args[0],
-  "#43066f"
-);
+```ts
+addFieldInput(block, "COLOR", "colour_picker", "COLOUR", args[0], "#43066f");
 ```
 
-2 つ目の引数は vm 側で定義した変数の名前<br>
-3 つ目の引数は `colour_picker`固定<br>
-4 つ目の引数は `COLOUR`固定？<br>
-5 つ目の引数は実際に渡す値<br>
-6 つ目の引数は不明、デフォルト値?<br>
+### `addField`
 
-### addField
-
-```js
-converter.addField(block, 引数名, 渡す値, デフォルト値？);
+```ts
+addField(block: block, name: string, value: string | args, attributes = {}): void;
 ```
 
 ブロックに引数(メニュー)を渡します。<br>
 ブロックを引数に持てないタイプのメニューに引数を渡すことが可能です。<br>
 ![menu](/images/menu.png)
 
-1 つ目の引数は 引数を渡すブロック。基本的に`block`のままで問題ない<br>
-2 つ目の引数は vm 側の`arguments`で決めた引数名<br>
-3 つ目の引数は 実際に渡す値。基本的には`args[n]`という形になる<br>
-4 つ目の引数は 不明。デフォルト値? なくても問題ない<br>
+- `block`
+  - `createBlock`などで作ったブロック
+- `name`
+  - vm 側で決めた変数名
+- `value`
+  - 実際に渡す値
+- `attribute`
+  - 不明
+  - デフォルト値？
 
-### addInput
+### `addInput`
 
-```js
-converter.addInput(block, 引数名, 渡す値, デフォルト値？);
+```ts
+addInput(block: block, name: string, inputBlock: string | block, shadowBlock: block): void;
 ```
 
-不明
+不明<br>
+`addFieldInput`と同じようなことをしている？
+
+- `block`
+  - `createBlock`などで作ったブロック
+- `name`
+  - vm 側で決めた変数名
+- `inputBlock`
+  - 不明
+- `shadowBlock`
+  - 不明
 
 ## Block -> Ruby で使う関数,変数
 
@@ -264,7 +429,6 @@ Generator.valueToCode(block, 引数名, 評価順?);
 ブロックから引数を取得することができます。<br>
 四角いタイプのメニュー以外から値を得ることができます
 
-
 1 つ目の引数は 引数を取得するブロック。基本的に`block`のままで問題ない<br>
 2 つ目の引数は vm 側の`arguments`で決めた引数名<br>
 3 つ目の引数は 評価順的なもの?。基本的には`ORDER_ATOMIC`,`ORDER_NONE`を使う。
@@ -272,7 +436,7 @@ Generator.valueToCode(block, 引数名, 評価順?);
 ### getFieldValue
 
 ```js
-Generator.getFieldValue(block, 引数名)
+Generator.getFieldValue(block, 引数名);
 ```
 
 ブロックから引数を取得することができます。<br>
@@ -280,7 +444,6 @@ Generator.getFieldValue(block, 引数名)
 
 1 つ目の引数は 引数を取得するブロック。基本的に`block`のままで問題ない<br>
 2 つ目の引数は vm 側の`arguments`で決めた引数名<br>
-
 
 ## ORDER シリーズ
 

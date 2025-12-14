@@ -67,16 +67,16 @@ const snippetsList = [
 
 ### 例
 
-![snippets](/images/snippets-case.png)
+![snippets](/images/snippetsCase.png)
 
 ```jsonc
 "snippet": "microbit.display_text(\"こんにちは!\")",
 ```
 
-![code](/images/snippets-code.png)
+![code](/images/snippetsCode.png)
 
 ```jsonc
 "description": "(こんにちは!)を表示する"
 ```
 
-![block](/images/snippets-block.png)
+![block](/images/snippetsBlock.png)

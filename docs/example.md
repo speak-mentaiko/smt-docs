@@ -44,23 +44,6 @@ converter.registerCallMethod("GPIO", "new", 2, (params) => {
 ### `gpio25 =`
 
 ```js
-// 省略
-const gpioPins = ["25", "32"];
-// 省略
-
-// gpio
-gpioPins.forEach((pin) => {
-  converter.registerCallMethod("self", "gpio" + pin, 0, (params) => {
-    const { node } = params;
-    return converter.createRubyExpressionBlock("gpio" + pin, node);
-  });
-});
-```
-
-`gpio25 = `の`gpio25`の部分を作成<br>
-`gpio`では`25`,`32`2 つの変数があるため同時に作成
-
-```js
 onVasgn: function (scope, variable, rh) {
     const expression = this._getRubyExpression(rh);
     if (!expression) return null;
@@ -119,11 +102,11 @@ const match = expression.match(/GPIO\.new\(\s*(\d+),\s*GPIO::OUT\s*\)/);
 if (variable.name !== `gpio${match[1]}`) return null;
 ```
 
-右辺が期待していたクラスのインスタンス生成か確認
+右辺が期待していたクラスのインスタンス生成か確認<br>
 
 > 今は正規表現で確認しているがなんかいい感じの方法があるのかも？
 
-また左辺の変数名と合致しているかも確認<br>
+変数名が Pin 番号と同じという想定なので変数名と Pin 番号を比較<br>
 
 ```js
 const block = this._changeRubyExpressionBlock(
@@ -135,9 +118,26 @@ this._addField(block, "TEXT", match[1]);
 ```
 
 ブロックの生成<br>
-引数の代入
+引数の代入<br>
 
 ## `gpio25.write( 1 )`
+
+```js
+// 省略
+const gpioPins = ["25", "32"];
+// 省略
+
+// gpio
+gpioPins.forEach((pin) => {
+  converter.registerCallMethod("self", "gpio" + pin, 0, (params) => {
+    const { node } = params;
+    return converter.createRubyExpressionBlock("gpio" + pin, node);
+  });
+});
+```
+
+`gpio25.write()`の`gpio25`の部分をいったん作成<br>
+`gpio`では`25`,`32`2 つの変数があるため同時に作成
 
 ```js
 onSend: function (receiver, name, args, rubyBlockArgs, rubyBlock, node) {
@@ -183,8 +183,6 @@ onSend: function (receiver, name, args, rubyBlockArgs, rubyBlock, node) {
             break;
         }
 ```
-
-`gpio25`の部分は`gpio25 = GPIO.new( 25, GPIO::OUT )`で作っているので割愛
 
 ```js
 onSend: function (receiver, name, args, rubyBlockArgs, rubyBlock, node) {
@@ -256,4 +254,77 @@ this._addField(block, "TEXT2", args[0]);
 ```
 
 ブロックの生成と引数の追加<br>
-`expression`だった場合とそうでない場合では作り方が違うため分岐
+`expression`だった場合とそうでない場合では作り方が違うため分岐<br>
+
+## `pwm26.duty( ( 100 % 101 ).to_i )`
+
+```js
+const match = receiverName.match(/^pwm(\d+)$/);
+
+const pin = match[1];
+if (pin !== '26' && pin !== '33') return null;
+
+if (match && args.length === 1) {
+    const duty = (() => {
+        if (this._isBlock(args[0])) {
+            const source = this._getSource(args[0].node);
+
+            deleteBlock(this, args[0]);
+
+            return source.match(/\(\s*(\d+)\s*%\s*\d+\s*\)\.to_i/)[1];
+        }
+    })();
+    if (!duty) return null;
+
+    const block = (() => {
+        if (this._isRubyExpression(receiver)) {
+            return this._changeRubyExpressionBlock(
+                receiver,
+                'kanirobo2_command5',
+                'statement'
+            );
+        } else {
+            return this._changeBlock(receiver, 'kanirobo2_command5', 'statement');
+        }
+    })();
+
+    this._addField(block, 'TEXT', pin);
+    this._addNumberInput(block, 'NUM', 'math_number', Number(duty));
+    return block;
+}
+break;
+```
+
+`onSend`と`receiverName`の説明は割愛<br>
+
+```js
+const match = receiverName.match(/^pwm(\d+)$/);
+
+const pin = match[1];
+if (pin !== "26" && pin !== "33") return null;
+```
+
+ピン番号の確認
+
+```js
+const duty = (() => {
+  if (this._isBlock(args[0])) {
+    const source = this._getSource(args[0].node);
+
+    deleteBlock(this, args[0]);
+
+    return source.match(/\(\s*(\d+)\s*%\s*\d+\s*\)\.to_i/)[1];
+  }
+})();
+if (!duty) return null;
+```
+
+ブロックの引数に必要なのは`( 100 % 101 ).to_i`のうち`100`という部分のみなのでその部分を取り出す<br>
+まず引数として`( 100 % 101 ).to_i`が入ってくる
+これを 1 つのブロックとして解釈される
+さらに`.to_i`の引数である`100 % 101`もブロックと解釈される
+これらブロックを解決しないと変換ができない
+ので無理やり`(100 % 101).to_i`をブロックじゃないよとしている
+
+> 今のコードでは無理やりブロックであるという情報を落としているがあまりよくない気がする<br>
+> が解決方法がいまいち分からない

@@ -2,7 +2,7 @@
 
 ## `value`を逆変換する場合
 
-![nomal_block](/images/nomal_block.png)
+![nomal_block](/images/nomalBlock.png)
 
 基本的な形(引数入力なし)
 
@@ -41,17 +41,17 @@ return block;
 ブロックの形は以下のようなものがあります。<br>
 
 - `value`<br>
-  ![value](/images/valueblock.png)<br>
+  ![value](/images/valueBlock.png)<br>
 - `value_boolean`<br>
-  ![alt text](/images/value-booleanblock.png)<br>
+  ![alt text](/images/valueBooleanBlock.png)<br>
 - `statement`<br>
-  ![statement](/images/statement-block.png)<br>
+  ![statement](/images/statementBlock.png)<br>
 - `hat`<br>
-  ![alt text](/images/hatblock.png)
+  ![alt text](/images/hatBlock.png)
 
 ## `puts(${num})`を逆変換する場合
 
-![statement-block](/images/statement-block.png)
+![statement-block](/images/statementBlock.png)
 
 基本的な形(引数入力あり)
 
@@ -180,7 +180,7 @@ converter.addNumberInput(block, "NUM", "math_number", args[0], 2);
   - 5 つ目の引数は実際に渡す値
   - 6 つ目の引数は不明、デフォルト値？
 
-  ![menu-block](/images/menu-block.png)
+  ![menu-block](/images/menuBlock.png)
 
 - `converter.addInput`
   - 不明

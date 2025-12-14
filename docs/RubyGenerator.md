@@ -8,7 +8,7 @@ Generator.sample_command0 = function () {
 };
 ```
 
-![block](/images/nomal_block.png)
+![block](/images/nomalBlock.png)
 
 そのまま出したいコードを返す
 
@@ -20,7 +20,7 @@ Generator.sample_value0 = function () {
 };
 ```
 
-![valueblock](/images/valueblock.png)
+![valueblock](/images/valueBlock.png)
 
 返したいコードと`Generator.ORDER_ATOMIC`を配列にして返す
 
@@ -35,7 +35,7 @@ Generator.sample_command1 = function (block) {
 };
 ```
 
-![menu](/images/menu-block.png)<br>
+![menu](/images/menuBlock.png)<br>
 画像のようなメニューの際に使う。
 
 引数は`Generator.valueToCode`で取得する。<br>
@@ -68,7 +68,7 @@ Generator.sample_value1 = function (block) {
 };
 ```
 
-![valueblock-menu](/images/valueblock-menu.png)
+![valueblock-menu](/images/valueBlockMenu.png)
 
 返すコードによって`order`の中身を変える<br>
 この場合は積を計算するため`ORDER_MULTIPLICATIVE`を使用する。<br>
@@ -99,5 +99,5 @@ Generator.sample_menu_menu1 = function (block) {
 ```
 
 Ruby -> Block の変換の際に使います。<br>
-メニューの内容は`Generator.getFieldValue`で取得します。<br>
+メニューの内容は`getFieldValue`で取得します。<br>
 2 つ目の引数は vm 側で定義したメニュー名<br>
