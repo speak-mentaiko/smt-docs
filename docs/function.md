@@ -5,10 +5,10 @@
 
 ## Ruby -> Block で使う関数
 
-### `registerCallMethod`
+### `registerOnSend`
 
 ```ts
-registerCallMethod(receiverName: string, name: string, numArgs: number, createBlockFunc: (params: params): block):void;
+registerOnSend(receiverName: string, name: string, numArgs: number, createBlockFunc: (params: params): block => {}): void;
 ```
 
 基本的なブロック(`value`, `value_boolean`, `statement`, `hat`)が変換できます。
@@ -38,15 +38,7 @@ registerCallMethod(receiverName: string, name: string, numArgs: number, createBl
     - `node`
       - 構文木
 
-### `registerOnSend`
-
-```ts
-registerOnSend(receiverName: string, name: string, numArgs: number, createBlockFunc: (params: params): block): void;
-```
-
-[`registerCallMethod`](#registercallmethod)と同じです
-
-### `registerCallMethodWithBlock`
+### `registerOnSendWithBlock`
 
 > 確認しきれていません
 
@@ -56,7 +48,7 @@ registerOnSendWithBlock(
   name: string,
   numArgs: number,
   numRubyBlockArgs: number,
-  createBlockFunc: (params: params): block
+  createBlockFunc: (params: params): block => {}
 ): void;
 ```
 
@@ -221,7 +213,7 @@ createRubyExpressionBlock(expression: string, node: node): block;
 ### `changeBlock`
 
 ```ts
-changeBlock(block: block, opcode: string: blockType: string): block
+changeBlock(block: block, opcode: string: blockType: string): block;
 ```
 
 `expression`以外の式を実際のブロックに変換する<br>
@@ -256,7 +248,7 @@ changeRubyExpressionBlock(block: block, opcode: string, blockType: string): bloc
 ### `removeBlock`
 
 ```ts
-removeBlock(block: block): void
+removeBlock(block: block): void;
 ```
 
 与えられたブロックを削除する
@@ -303,7 +295,7 @@ addNumberInput(block: block, name: string, opcode: string, inputValue: number | 
 - `opcode`
   - 不明　以下のようにものがある
   - `math_number`
-  - 実数?
+    - 実数?
   - `math_positive_number`
     - 正の実数？負の数も渡せるため不明
   - `math_whole_number`
@@ -322,7 +314,7 @@ addNumberInput(block: block, name: string, opcode: string, inputValue: number | 
 ### `addNoteInput`
 
 ```ts
-addNoteInput(block: block, name: string, inputValue: number | args, shadowValue: number):void
+addNoteInput(block: block, name: string, inputValue: number | args, shadowValue: number): void;
 ```
 
 ブロックに引数を値(鍵盤)を渡します<br>
@@ -340,7 +332,14 @@ addNoteInput(block: block, name: string, inputValue: number | args, shadowValue:
 ### `addFieldInput`
 
 ```ts
-addFieldInput(block: block, name: string, opcode: string, fieldName: string, inputValue: string | args, shadowValue: string): void;
+addFieldInput(
+  block: block,
+  name: string,
+  opcode: string,
+  fieldName: string,
+  inputValue: string | args,
+  shadowValue: string
+): void;
 ```
 
 ブロックに引数(メニューもしくはブロック)を渡します。<br>
