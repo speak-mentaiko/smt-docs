@@ -7,7 +7,7 @@
 
 ### `registerOnSend`
 
-```ts
+```typescript
 registerOnSend(receiverName: string, name: string, numArgs: number, createBlockFunc: (params: params): block => {}): void;
 ```
 
